@@ -24,18 +24,15 @@ public class StatistiqueTests {
 
     @Test
     public void testPrixMoyen() {
-        
         List<Voiture> voitures = new ArrayList<>();
         voitures.add(new Voiture("Tesla", 50000));
         voitures.add(new Voiture("Renault", 10000));
 
-        
+        // Version correcte de la méthode de l'interface
         Mockito.when(echantillon.getCars()).thenReturn(voitures);
 
-        
         int prixMoyen = statistiqueService.prixMoyen();
 
-        
         assertEquals(30000, prixMoyen);
     }
 }
