@@ -2,16 +2,40 @@ package com.example.demo.service;
 
 import com.example.demo.data.Voiture;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class StatistiqueTests {
 
-    @MockBean
-    StatistiqueImpl statistiqueImpl;
+    @Mock
+    private Echantillon echantillon;
 
+    @InjectMocks
+    private StatistiqueImpl statistiqueService;
+
+    @Test
+    public void testPrixMoyen() {
+        
+        List<Voiture> voitures = new ArrayList<>();
+        voitures.add(new Voiture("Tesla", 50000));
+        voitures.add(new Voiture("Renault", 10000));
+
+        
+        Mockito.when(echantillon.getCars()).thenReturn(voitures);
+
+        
+        int prixMoyen = statistiqueService.prixMoyen();
+
+        
+        assertEquals(30000, prixMoyen);
+    }
 }
