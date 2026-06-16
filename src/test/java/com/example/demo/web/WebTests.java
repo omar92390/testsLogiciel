@@ -1,30 +1,37 @@
 package com.example.demo.web;
 
 import com.example.demo.data.Voiture;
-import com.example.demo.service.Echantillon;
-import com.example.demo.service.StatistiqueImpl;
+import com.example.demo.service.Statistique;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class WebTests {
-
-    @MockBean
-    StatistiqueImpl statistiqueImpl;
+@WebMvcTest(StatistiqueController.class)
+public class WebTests {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
+    @MockBean
+    private Statistique statistiqueService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    public void testAjouterVoiture() throws Exception {
+        Voiture voiture = new Voiture("Ferrari", 250000);
+
+        mockMvc.perform(post("/voiture")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(voiture)))
+                .andExpect(status().isOk());
+    }
 }
