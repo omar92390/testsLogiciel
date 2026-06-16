@@ -14,17 +14,15 @@ public class StatistiqueController {
 
     @GetMapping(value = "/statistique")
     public Echantillon getStatistiques() throws PasDeVoitureException {
-        try{
+        try {
             return statistique.prixMoyen();
         } catch (ArithmeticException e) {
             throw new PasDeVoitureException();
         }
-
     }
 
     @PostMapping("/voiture")
-    public void creerVoiture(@RequestBody Voiture voiture){
+    public void creerVoiture(@RequestBody Voiture voiture) {
         statistique.ajouter(voiture);
     }
-
 }
