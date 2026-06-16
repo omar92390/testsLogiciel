@@ -10,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,5 +35,14 @@ public class WebTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(voiture)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetStatistiquesSansVoiture() throws Exception {
+        // On force le service à lever l'exception arithmétique (division par zéro)
+        doThrow(new ArithmeticException()).when(statistiqueService).prixMoyen();
+
+        mockMvc.perform(get("/statistique"))
+                .andExpect(status().isNotFound());
     }
 }
