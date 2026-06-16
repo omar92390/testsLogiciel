@@ -28,8 +28,8 @@ public class StatistiqueTests {
         voitures.add(new Voiture("Tesla", 50000));
         voitures.add(new Voiture("Renault", 10000));
 
-        // Version correcte de la méthode de l'interface
-        Mockito.when(echantillon.getCars()).thenReturn(voitures);
+        // Utilisation de la bonne méthode du projet
+        Mockito.when(echantillon.getVoitures()).thenReturn(voitures);
 
         int prixMoyen = statistiqueService.prixMoyen();
 
