@@ -1,37 +1,49 @@
+// Rendu final du TP2 Mockito
 package com.example.demo.service;
 
 import com.example.demo.data.Voiture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class StatistiqueTests {
-
-    @Mock
-    private Echantillon echantillon;
 
     @InjectMocks
     private StatistiqueImpl statistiqueService;
 
     @Test
-    public void testPrixMoyen() {
-        List<Voiture> voitures = new ArrayList<>();
-        voitures.add(new Voiture("Tesla", 50000));
-        voitures.add(new Voiture("Renault", 10000));
+    public void testAjouterUneVoiture() {
+        Voiture voiture = new Voiture("Tesla", 50000);
+        statistiqueService.ajouter(voiture);
 
-        Mockito.when(echantillon.getVoitures()).thenReturn(voitures);
+        Echantillon result = statistiqueService.prixMoyen();
+        
+        assertEquals(1, result.getNombreDeVoitures());
+        assertEquals(50000, result.getPrixMoyen());
+    }
 
-        int prixMoyen = statistiqueService.prixMoyen();
+    @Test
+    public void testPrixMoyenAvecPlusieursVoitures() {
+        Voiture tesla = new Voiture("Tesla", 50000);
+        Voiture renault = new Voiture("Renault", 10000);
 
-        assertEquals(30000, prixMoyen);
+        statistiqueService.ajouter(tesla);
+        statistiqueService.ajouter(renault);
+
+        Echantillon result = statistiqueService.prixMoyen();
+        
+        assertEquals(2, result.getNombreDeVoitures());
+        assertEquals(30000, result.getPrixMoyen());
+    }
+
+    @Test
+    public void testPrixMoyenSansVoiture() {
+        assertThrows(ArithmeticException.class, () -> {
+            statistiqueService.prixMoyen();
+        });
     }
 }
