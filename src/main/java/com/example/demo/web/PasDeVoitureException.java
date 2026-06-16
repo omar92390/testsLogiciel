@@ -3,11 +3,7 @@ package com.example.demo.web;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Pas de voiture enregistrée")
 public class PasDeVoitureException extends Exception {
-
-    public PasDeVoitureException(){
-        super("Pas de voiture pour calculer les statistiques");
-    }
-
+    // Exception personnalisée pour renvoyer un code 404 HTTP
 }
